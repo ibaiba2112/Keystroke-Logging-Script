@@ -1,1 +1,2 @@
 This is a test, this is where I type random stuff and it gets copied to the file on my desktop
+ this is a test for the local file keyshift logger

@@ -1,0 +1,1 @@
+this is a test for the local file keyshift loggerKey.esc
